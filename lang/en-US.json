@@ -1,0 +1,4 @@
+{
+  "exception.illegal_access.read_only": "Attempted to modify read-only storage.",
+  "example.index.hello_welcome": "Hello there and welcome, {{name}}!"
+}
