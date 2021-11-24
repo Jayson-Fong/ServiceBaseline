@@ -1,7 +1,6 @@
 {
     "require": {
         "catfan/medoo": "^2.1",
-        "google/apiclient": "^2.0",
         "twig/twig": "^3.0",
         "utopia-php/locale": "^0.6.0"
     }
