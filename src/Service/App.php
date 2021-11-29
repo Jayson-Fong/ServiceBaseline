@@ -4,15 +4,13 @@ namespace Service;
 
 use Exception;
 use Medoo\Medoo;
+use Service\Entity\EntityManager;
 use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 use Twig\Loader\FilesystemLoader;
 use Utopia\Locale\Locale;
 use Service\Controller\Controller;
 use Service\Controller\Index;
-use Service\Template\PhraseExtension;
+use Service\Template\Core;
 use Service\Util\Database;
 use Service\Util\ReadOnlyArray;
 
@@ -28,7 +26,7 @@ class App
     /**
      * @throws Exception
      */
-    public static function getInstance(array $config): ?App
+    public static function getInstance(array $config = []): ?App
     {
         if (is_null(self::$instance))
         {
@@ -83,7 +81,7 @@ class App
             $envOptions['cache'] = $this->config['template']['cacheDir'];
         }
         $this->environment = new Environment($loader, $envOptions);
-        $this->environment->addExtension(new PhraseExtension());
+        $this->environment->addExtension(new Core());
     }
 
     public function config(): ReadOnlyArray
@@ -126,6 +124,27 @@ class App
     public function templateEnvironment(): Environment
     {
         return $this->environment;
+    }
+
+    public function em(): EntityManager
+    {
+        return new EntityManager($this);
+    }
+
+    public function buildLink(string $link, array $args)
+    {
+        $queryString = '';
+        foreach ($args as $key => $value)
+        {
+            $queryString .= $key . (strlen($value) > 0 ? '=' . $value : '');
+        }
+
+        return rtrim($this->config['baseUrl'], '/') .
+            DIRECTORY_SEPARATOR .
+            ($this->config['prettyUrl'] ?
+                $link . ($queryString ? '?' . $queryString : '') :
+                'index.php?' . $link . ($queryString ? '&' . $queryString : '')
+            );
     }
 
 }

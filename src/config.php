@@ -17,5 +17,7 @@ $config = [
         'cacheDir' => 'cache',
         'useCache' => false
     ],
-    'locale' => 'en-US'
+    'locale' => 'en-US',
+    'baseUrl' => 'https://www.example.com',
+    'prettyUrl' => false
 ];

@@ -3,13 +3,14 @@
 namespace Service\Util;
 
 use ArrayAccess;
+use ArrayObject;
 use Service\App;
 use Service\Exception\AccessException;
 
 /**
  * @author Jayson Fong <contact@jaysonfong.org>
  */
-class ReadOnlyArray implements ArrayAccess
+class ReadOnlyArray extends ArrayObject
 {
 
     private array $array;
