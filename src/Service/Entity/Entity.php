@@ -26,14 +26,30 @@ abstract class Entity extends Component
         return $this->data;
     }
 
-    public function isInsert(): bool
-    {
-        return $this->isInsert;
-    }
-
     public function save()
     {
-        $this->app->em()->write($this);
+        $structure = $this::getStructure();
+        $data = $this->data;
+
+        if ($this->isInsert)
+        {
+            unset($data[$structure->offsetGet('primary_key')]);
+            $this->app->db()->insert(
+                $structure->offsetGet('table'),
+                $data
+            );
+        }
+        else
+        {
+            $primaryKey = $structure->offsetGet('primary_key');
+            $this->app->db()->update(
+                $structure->offsetGet('table'),
+                $data,
+                [
+                    $primaryKey => $data[$primaryKey]
+                ]
+            );
+        }
     }
 
     public function __get(string $name): mixed

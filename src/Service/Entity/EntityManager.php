@@ -50,30 +50,4 @@ class EntityManager extends Component
         return new $name($this->app, true, $data);
     }
 
-    public function write(Entity $entity)
-    {
-        $structure = $entity::getStructure();
-        $data = $entity->getData();
-
-        if ($entity->isInsert())
-        {
-            unset($data[$structure->offsetGet('primary_key')]);
-            $this->app->db()->insert(
-                $structure->offsetGet('table'),
-                $data
-            );
-        }
-        else
-        {
-            $primaryKey = $structure->offsetGet('primary_key');
-            $this->app->db()->update(
-                $structure->offsetGet('table'),
-                $data,
-                [
-                    $primaryKey => $data[$primaryKey]
-                ]
-            );
-        }
-    }
-
 }
